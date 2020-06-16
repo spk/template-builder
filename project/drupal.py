@@ -3,7 +3,6 @@ from .remote import RemoteProject
 import json
 from collections import OrderedDict
 
-
 class Drupal7_vanilla(BaseProject):
     version = '7.67'
 
@@ -25,6 +24,18 @@ class Drupal8(RemoteProject):
     def platformify(self):
         return super(Drupal8, self).platformify + [
             'cd {0} && composer require platformsh/config-reader drush/drush drupal/console drupal/redis --ignore-platform-reqs'.format(
+                self.builddir)
+        ]
+
+class Drupal9(RemoteProject):
+    # This can have a common base with Drupal 8 eventually, once modules are updated.
+    major_version = "9.0"
+    remote = 'https://github.com/drupal/recommended-project.git'
+
+    @property
+    def platformify(self):
+        return super(Drupal9, self).platformify + [
+            'cd {0} && composer require platformsh/config-reader drush/drush drupal/redis --ignore-platform-reqs'.format(
                 self.builddir)
         ]
 

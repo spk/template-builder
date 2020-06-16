@@ -14,6 +14,7 @@ disk: 1024
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
     build: |
+       rm -rf wlpExtract
        mvn clean package
 
 mounts:
@@ -38,4 +39,4 @@ web:
     commands:
         start: |
            cp target/microprofile-liberty.jar server/microprofile-liberty.jar
-           java -jar -Xmx512m -Ddefault.http.port=$PORT server/microprofile-liberty.jar
+           java -jar -Xmx$(jq .info.limits.memory /run/config.json)m -XX:+ExitOnOutOfMemoryError -Ddefault.http.port=$PORT server/microprofile-liberty.jar
